@@ -100,7 +100,7 @@ public class ExecucaoCallImpl implements ExecucaoMetodoCall {
         /** {@inheritDoc} */
         @Override public void run() {
             try {
-                externalConnect = new ServerSocket(8090);
+                externalConnect = new ServerSocket(8092);
 
                 while (!isInterrupted()) {
                     Socket socket = externalConnect.accept();
