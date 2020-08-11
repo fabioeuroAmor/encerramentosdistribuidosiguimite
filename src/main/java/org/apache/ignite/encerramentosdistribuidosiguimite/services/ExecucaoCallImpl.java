@@ -1,26 +1,27 @@
 package org.apache.ignite.encerramentosdistribuidosiguimite.services;
 
+import org.apache.ignite.*;
+import org.apache.ignite.encerramentosdistribuidosiguimite.domains.Maintenance;
+import org.apache.ignite.encerramentosdistribuidosiguimite.iservices.ExecucaoMetodoCall;
+import org.apache.ignite.encerramentosdistribuidosiguimite.iservices.TransmissaoDeinformacaoSincrona;
+import org.apache.ignite.lang.IgniteCallable;
+import org.apache.ignite.resources.IgniteInstanceResource;
+import org.apache.ignite.services.ServiceContext;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collection;
 
-import org.apache.ignite.Ignite;
-import org.apache.ignite.IgniteAtomicSequence;
-import org.apache.ignite.IgniteCache;
-import org.apache.ignite.IgniteCompute;
-import org.apache.ignite.Ignition;
-import org.apache.ignite.encerramentosdistribuidosiguimite.domains.Maintenance;
-import org.apache.ignite.encerramentosdistribuidosiguimite.iservices.TransmissaoDeinformacaoSincrona;
-import org.apache.ignite.resources.IgniteInstanceResource;
-import org.apache.ignite.services.ServiceContext;
 
 /*
  * Isso serve para distribuir informações nos nós do cluster
  * 
  */
-public class TransmissaoDeinformacaoSincronaImpl implements TransmissaoDeinformacaoSincrona{
+public class ExecucaoCallImpl implements ExecucaoMetodoCall {
 	
 	 @IgniteInstanceResource
 	 private Ignite ignite;
@@ -34,25 +35,6 @@ public class TransmissaoDeinformacaoSincronaImpl implements TransmissaoDeinforma
 	    
 	    /** Reference to the cache. */
 	    private IgniteCache<Integer, Maintenance> maintCache;
-	
-
-
-	@Override
-	public void enviaMensagemRemota() {
-//		 Ignite ignite =Ignition.start();
-//		 ignite = Ignition.ignite(); 
-		
-		//final Ignite ignite = Ignition.ignite();
-		 
-		    //Limit broadcast to remote nodes only.
-			//Limite a transmissão apenas para nós remotos.
-			IgniteCompute compute = ignite.compute(ignite.cluster().forRemotes());
-			
-			// Print out hello message on remote nodes in the cluster group.
-			//Imprima mensagem (Hello Node) em nós remotos no grupo de clusters. Lembra que broadcast é falar com todos os nós dos cluster
-			compute.broadcast(() -> System.out.println("Hello Node sicrona: " + Ignition.localIgnite().cluster().localNode().id()));
-		
-	}
 
 	@Override
 	public void cancel(ServiceContext ctx) {
@@ -90,8 +72,25 @@ public class TransmissaoDeinformacaoSincronaImpl implements TransmissaoDeinforma
 	        sequence = ignite.atomicSequence("MaintenanceIds", 1, true);
 		
 	}
-	
-	   /**
+
+	@Override
+	public void executar() {
+
+		Collection<IgniteCallable<Integer>> calls = new ArrayList<>();
+
+		// Iterate through all words in the sentence and create callable jobs.
+		for (String word : "How many characters".split(" "))
+			calls.add(word::length);
+
+		// Execute collection of callables on the cluster.
+		Collection<Integer> res = ignite.compute().call(calls);
+
+		// Add all the word lengths received from cluster nodes.
+		int total = res.stream().mapToInt(Integer::intValue).sum();
+
+	}
+
+	/**
      * Thread that accepts request from external applications that don't use Apache Ignite service grid API.
      */
     private class ExternalCallsProcessor extends Thread {
