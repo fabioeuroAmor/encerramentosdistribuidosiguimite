@@ -4,7 +4,7 @@ import org.apache.ignite.Ignite;
 import org.apache.ignite.Ignition;
 
 /**
- * Hello world!
+ * Hello world! teste
  *
  */
 public class App {

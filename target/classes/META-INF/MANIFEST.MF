@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Built-By: Fabio
+Build-Jdk: 1.8.0_111
+Created-By: Maven Integration for Eclipse
+Main-Class: org.apache.ignite.encerramentosdistribuidosiguimite.app.Ap
+ p
+
