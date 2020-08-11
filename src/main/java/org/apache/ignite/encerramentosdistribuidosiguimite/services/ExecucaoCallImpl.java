@@ -81,7 +81,7 @@ public class ExecucaoCallImpl implements ExecucaoMetodoCall {
 		// Iterate through all words in the sentence and create callable jobs.
 		for (String word : "How many characters".split(" "))
 			calls.add(word::length);
-
+		//
 		// Execute collection of callables on the cluster.
 		Collection<Integer> res = ignite.compute().call(calls);
 
