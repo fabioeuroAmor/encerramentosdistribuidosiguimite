@@ -1,3 +1,5 @@
 org\apache\ignite\encerramentosdistribuidosiguimite\services\TransmissaoDeinformacaoSincronaImpl$1.class
+org\apache\ignite\encerramentosdistribuidosiguimite\services\ExecucaoRunImpl$1.class
 org\apache\ignite\encerramentosdistribuidosiguimite\services\ExecucaoCallImpl$1.class
+org\apache\ignite\encerramentosdistribuidosiguimite\services\ExecucaoMetodoAssincronaCallImpl$1.class
 org\apache\ignite\encerramentosdistribuidosiguimite\services\TransmissaoDeinformacaoAssincronaImpl$1.class
